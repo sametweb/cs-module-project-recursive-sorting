@@ -14,10 +14,12 @@ def binary_search(arr, target, start, end):
         return middle
 
     elif arr[middle] < target:
-        return binary_search(arr, target, middle + 1, end)
+        start = middle + 1
 
     elif arr[middle] > target:
-        return binary_search(arr, target, start, middle - 1)
+        end = middle - 1
+
+    return binary_search(arr, target, start, end)
 
 
 # STRETCH: implement an order-agnostic binary search
@@ -28,4 +30,41 @@ def binary_search(arr, target, start, end):
 # or iteratively
 def agnostic_binary_search(arr, target):
     # Your code here
-    pass
+
+    if len(arr) == 0:
+        return -1
+
+    if len(arr) == 1:
+        if arr[0] == target:
+            return 0
+        else:
+            return -1
+
+    is_desc = True if arr[0] > arr[len(arr) - 1] else False
+
+    middle = math.floor(len(arr) / 2)
+
+    if arr[middle] == target:
+        return middle
+
+    if is_desc:
+        if arr[middle] < target:
+            found_index = agnostic_binary_search(arr[:middle], target)
+            return found_index
+        else:
+            found_index = agnostic_binary_search(arr[middle:], target)
+            if found_index == -1:
+                return found_index
+            else:
+                return middle + found_index
+
+    else:
+        if arr[middle] < target:
+            found_index = agnostic_binary_search(arr[middle:], target)
+            if found_index == -1:
+                return found_index
+            else:
+                return middle + found_index
+        else:
+            found_index = agnostic_binary_search(arr[:middle], target)
+            return found_index
